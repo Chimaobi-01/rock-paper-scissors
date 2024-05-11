@@ -1,88 +1,79 @@
+let humanScore = 0
+let computerScore = 0
+const buttons = document.querySelectorAll('button')
+const container = document.querySelector('#container')
+const message = document.querySelector('.message')
+const score = document.querySelector('.score')
+score.textContent = `${computerScore}:${humanScore}`
+
 playGame()
 
+score.addEventListener('change', e => {
+    console.log(e.target.textContent);
+})
 
-
-
-function getComputerChoice() {
-    const randomInt = Math.floor(Math.random() * 9) + 1
-    if (randomInt <= 6 && randomInt >= 4) {
-        return "paper"
-    }
-    else if (randomInt <= 3) {
-        return "scissors"
-    }
-    else {
-        return "rock"
-    }
-}
-function getHumanChoice() {
-    let humanChoice = prompt("Input either 'rock' 'paper' or 'scissors' to play.")
-
-    if (humanChoice != 'paper' && humanChoice != 'rock' && humanChoice != 'scissors') {
-        humanChoice = prompt('Input is invalid. Please provide a valid prompt. "ROCK","SCISSORS" or "PAPER"')
-    }
-    return humanChoice
-}
 function playGame() {
-    let humanScore = 0
-    let computerScore = 0
-    let roundAvailable = 5
-    let currentRound = 1
 
+    container.addEventListener('click', e => {
+        const button = e.target
 
-    alert('WELCOME TO ROCK, PAPER AND SCISSORS CONSOLE GAME')
-    while (roundAvailable && confirm(`Begin round ${currentRound}. Rounds available: ${roundAvailable}`)) {
-        let humanSelection = getHumanChoice()
-        const computerSelection = getComputerChoice()
+        switch (button.textContent) {
+            case "scissors":
+                playRound(getComputerChoice(), button.textContent)
+                if(score.textContent.split(':').find(i => Number(i) === 5)) 
+                    endGame()
+                message.style.visibility = 'visible'
+                break;
+            case "rock":
+                playRound(getComputerChoice(), button.textContent)
+                if(score.textContent.split(':').find(i => Number(i) === 5)) 
+                    endGame()
+                message.style.visibility = 'visible'
+                break;
+            case "paper":
+                playRound(getComputerChoice(), button.textContent)
+                if(score.textContent.split(':').find(i => Number(i) === 5)) 
+                    endGame()
+                message.style.visibility = 'visible'
+                break;
 
-        if (!humanSelection) {
-            alert('Game CANCELLED!')
-            break
+            default:
+                break;
         }
-        playRound(computerSelection, humanSelection)
+    })
 
-
-        roundAvailable--
-        currentRound++
-    }
-
-
-    if (roundAvailable < 1) {
-        let result
-        if (computerScore === humanScore) {
-            result = `IT'S A TIE! ${computerScore}-${humanScore}`
+    function getComputerChoice() {
+        const randomInt = Math.floor(Math.random() * 9) + 1
+        if (randomInt <= 6 && randomInt >= 4) {
+            return "paper"
         }
-        else if (computerScore > humanScore) {
-            result = `COMPUTER WINS!!! ${computerScore}-${humanScore}`
+        else if (randomInt <= 3) {
+            return "scissors"
         }
         else {
-            result = `HUMAN WINS!!! ${computerScore}-${humanScore}`
+            return "rock"
         }
-        console.clear()
-        console.log("*".repeat(9), "FINAL RESULT", "*".repeat(9))
-        console.log(" ".repeat(6), result)
-        alert(`\t\tGAME ENDED.\t\t\n\n ${result}`)
     }
-
-    alert('Thank you for your time!')
 
     function playRound(computerChoice, humanChoice) {
         switch (computerChoice) {
             case "paper":
                 switch (humanChoice) {
                     case "rock":
-                        console.log("You lose! Paper beats Rock");
                         computerScore++
-                        console.log(`Scores: COMPUTER ${computerScore}-${humanScore} HUMAN`);
+                        message.textContent = "You lose! Paper beats Rock"
+                        message.style.color = "red"
+                        score.textContent = `${computerScore}:${humanScore}`
                         break;
                     case "paper":
-                        console.log("It's a tie. Try again");
-                        console.log(`Scores: COMPUTER ${computerScore}-${humanScore} HUMAN`);
+                        message.textContent = "It's a tie. You both picked Paper!"
+                        message.style.color = "black"
                         break;
                     case "scissors":
-                        console.log("You win! Scissors beats Paper");
                         humanScore++
-                        console.log(`Scores: COMPUTER ${computerScore}-${humanScore} HUMAN`);
+                        message.textContent = "You win! Scissors beats Paper"
+                        message.style.color = "green"
+                        score.textContent = `${computerScore}:${humanScore}`
                         break;
 
                     default:
@@ -92,18 +83,20 @@ function playGame() {
             case "rock":
                 switch (humanChoice) {
                     case "scissors":
-                        console.log("You lose! Rock beats Scissors");
                         computerScore++
-                        console.log(`Scores: COMPUTER ${computerScore}-${humanScore} HUMAN`);
+                        message.textContent = "You lose! Rock beats Scissors"
+                        message.style.color = "red"
+                        score.textContent = `${computerScore}:${humanScore}`
                         break;
                     case "rock":
-                        console.log("It's a tie. Try again");
-                        console.log(`Scores: COMPUTER ${computerScore}-${humanScore} HUMAN`);
+                        message.textContent = "It's a tie. You both picked Rock!"
+                        message.style.color = "black"
                         break;
                     case "paper":
-                        console.log("You win! Paper beats Rock");
                         humanScore++
-                        console.log(`Scores: COMPUTER ${computerScore}-${humanScore} HUMAN`);
+                        message.textContent = "You win! Paper beats Rock"
+                        message.style.color = "green"
+                        score.textContent = `${computerScore}:${humanScore}`
                         break;
 
                     default:
@@ -113,18 +106,20 @@ function playGame() {
             case "scissors":
                 switch (humanChoice) {
                     case "paper":
-                        console.log("You lose! Scissors beats Paper");
                         computerScore++
-                        console.log(`Scores: COMPUTER ${computerScore}-${humanScore} HUMAN`);
+                        message.textContent = "You lose! Scissors beats Paper"
+                        message.style.color = "red"
+                        score.textContent = `${computerScore}:${humanScore}`
                         break;
                     case "scissors":
-                        console.log("It's a tie. Try again");
-                        console.log(`Scores: COMPUTER ${computerScore}-${humanScore} HUMAN`);
+                        message.textContent = "It's a tie. You both picked Scissors!"
+                        message.style.color = "black"
                         break;
                     case "rock":
-                        console.log("You win! Rock beats Scissors");
                         humanScore++
-                        console.log(`Scores: COMPUTER ${computerScore}-${humanScore} HUMAN`);
+                        message.textContent = "You win! Rock beats Scissors"
+                        message.style.color = "green"
+                        score.textContent = `${computerScore}:${humanScore}`
                         break;
 
                     default:
@@ -136,4 +131,33 @@ function playGame() {
                 break;
         }
     }
+}
+
+function endGame() {
+    const modal = document.createElement('div')
+    const modalWrap = document.createElement('div')
+    const playAgain = document.createElement('button')
+    const status = document.createElement('h1')
+
+    modal.classList.add('modal')
+    modalWrap.classList.add('modal-wrap')
+    status.classList.add('status')
+    playAgain.classList.add('reset')
+
+    playAgain.textContent = "Play Again"
+    status.textContent = humanScore === 5 ? "you win!" : "computer wins!"
+
+    modalWrap.appendChild(status)
+    modalWrap.appendChild(playAgain)
+    modal.appendChild(modalWrap)
+    document.querySelector('body').appendChild(modal)
+
+    playAgain.addEventListener('click', () => {
+        document.querySelector('body').removeChild(modal)
+        humanScore = 0
+        computerScore = 0
+        score.textContent = `${computerScore}:${humanScore}`
+        message.style.visibility = 'hidden'
+    })
+
 }
